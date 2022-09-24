@@ -6,6 +6,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app 
-    command: bash -c "yarn dev"
+    command: bash -c "yarn install && yarn dev"
     ports:
       - "3000:3000"
