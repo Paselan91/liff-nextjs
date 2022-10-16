@@ -15,7 +15,7 @@ import {
 import { FC, memo } from 'react'
 
 const Login: FC = () => {
-    const signUpUrl = "/signup"
+  const signUpUrl = '/signup'
 
   return (
     <Flex
@@ -62,7 +62,10 @@ const Login: FC = () => {
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Don't have an account ? <Link href={signUpUrl} color={'blue.400'}>Sign Up</Link>
+                Don't have an account ?{' '}
+                <Link href={signUpUrl} color={'blue.400'}>
+                  Sign Up
+                </Link>
               </Text>
             </Stack>
           </Stack>

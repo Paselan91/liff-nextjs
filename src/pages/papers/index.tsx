@@ -1,20 +1,14 @@
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Stack,
-  Avatar,
-  useColorModeValue,
-  SimpleGrid,
-  Container,
-} from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import { useQuery } from '@apollo/client'
+import { SimpleGrid, Container } from '@chakra-ui/react'
+import type { GetServerSideProps, NextPage } from 'next'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { memo } from 'react'
 import PaperCard from '../../components/organisms/PaperCard'
+
+import apolloClient from '@/graphql/apllo-client'
+import { COUNTRIES_QUERY } from '@/graphql/test/country.query'
+import { Country } from '@/graphql/test/type'
 
 const papers = [
   {
@@ -80,6 +74,9 @@ const papers = [
 ]
 
 const Papers: NextPage = () => {
+  const { loading, error, data } = useQuery(COUNTRIES_QUERY)
+
+  if (data) console.log(data)
   return (
     <>
       <Container maxW='6xl' color='white'>
@@ -101,3 +98,12 @@ const Papers: NextPage = () => {
 }
 
 export default memo(Papers)
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data } = await apolloClient.query({
+    query: COUNTRIES_QUERY,
+    variables: {},
+  })
+  const countries: Country[] = data.countries
+  return { props: { countries } }
+}
