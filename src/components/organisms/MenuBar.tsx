@@ -66,7 +66,6 @@ const navItems: NavItem[] = [
   },
 ]
 
-
 const MenuBar: FC = () => {
   const loginUrl = '/login'
   const signUpUrl = '/signup'
@@ -99,15 +98,15 @@ const MenuBar: FC = () => {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Button 
+          <Button
             as={'a'}
-            variant={'link'} 
+            variant={'link'}
             href={topUrl}
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}
             style={{ textDecoration: 'none' }}
-            >
+          >
             Logo
           </Button>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>

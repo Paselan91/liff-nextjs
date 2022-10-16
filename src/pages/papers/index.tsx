@@ -1,95 +1,54 @@
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Stack,
-  Avatar,
-  useColorModeValue,
-  SimpleGrid,
-  Container,
-} from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import { useQuery } from '@apollo/client'
+import { SimpleGrid, Container } from '@chakra-ui/react'
+import type { GetServerSideProps, NextPage } from 'next'
 
-import Image from 'next/image'
 import Link from 'next/link'
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import PaperCard from '../../components/organisms/PaperCard'
 
-const papers = [
-  {
-    id: 1,
-    title: 'paper 1',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 2,
-    title: 'paper 2',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 3,
-    title: 'paper 3',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 4,
-    title: 'paper 4',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 5,
-    title: 'paper 5',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 6,
-    title: 'paper 6',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 7,
-    title: 'paper 7',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 8,
-    title: 'paper 8',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 9,
-    title: 'paper 9',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-  {
-    id: 10,
-    title: 'paper 10',
-    description:
-      'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.',
-  },
-]
+import apolloClient from '@/graphql/apllo-client'
+import { FETCH_ALL_POKEMONS } from '@/graphql/test/pokemons.query'
+import { Pokemon } from '@/graphql/test/type'
 
-const Papers: NextPage = () => {
+const description =
+  'This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.This is sample text.'
+
+interface Props {
+  pokemons: Pokemon[]
+}
+
+const Papers: NextPage<Props> = ({ pokemons }) => {
+  const { loading, error, data } = useQuery(FETCH_ALL_POKEMONS)
+  const [clientPokemons, setClientPokemons] = useState<Pokemon[]>(pokemons)
+
+  useEffect(() => {
+    setClientPokemons(data?.pokemons)
+  }, [data])
+
+  if (error) console.error(error)
+    
+  if (!clientPokemons) {
+    return (
+      <Container maxW='6xl' color='white'>
+        <div>This is Error Page</div>
+      </Container>
+    )
+  }
+
   return (
     <>
       <Container maxW='6xl' color='white'>
         <div>This is Top Page</div>
         <SimpleGrid columns={3} spacing={10}>
-          {papers.map((paper: any, index: number) => (
+          {clientPokemons.map((pokemon: any, index: number) => (
             <div key={index}>
               <Link href={'/papers/1'}>
                 <div style={{ cursor: 'pointer' }}>
-                  <PaperCard title={paper.title} description={paper.description} />
+                  <PaperCard
+                    title={pokemon.name}
+                    description={description}
+                    imageUrl={pokemon.image}
+                  />
                 </div>
               </Link>
             </div>
@@ -101,3 +60,12 @@ const Papers: NextPage = () => {
 }
 
 export default memo(Papers)
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { data } = await apolloClient.query({
+    query: FETCH_ALL_POKEMONS,
+    variables: {},
+  })
+  const pokemons: Pokemon[] = data?.pokemons
+  return { props: { pokemons } }
+}
