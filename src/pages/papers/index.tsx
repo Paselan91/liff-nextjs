@@ -26,12 +26,11 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
   }, [data])
 
   if (!clientPokemons) {
-    return
-    ;<>
+    return (
       <Container maxW='6xl' color='white'>
         <div>This is Error Page</div>
       </Container>
-    </>
+    )
   }
 
   return (
