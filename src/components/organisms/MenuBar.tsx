@@ -18,9 +18,6 @@ import {
 } from '@chakra-ui/react'
 import { FC, memo } from 'react'
 
-interface Props {
-  navItems: NavItem[]
-}
 interface NavItem {
   label: string
   subLabel?: string
@@ -70,7 +67,7 @@ const navItems: NavItem[] = [
 ]
 
 
-const MenuBar: FC<Props> = ({navItems}) => {
+const MenuBar: FC = () => {
   const loginUrl = '/login'
   const signUpUrl = '/signup'
   const topUrl = '/papers'
