@@ -20,7 +20,7 @@ const PaperCard: FC<Props> = ({ title, description, imageUrl }) => {
         overflow='hidden'
       >
         <Center>
-          <Image src={imageUrl} alt='paper image' objectFit='cover' boxSize='200px' />
+          <Image src={imageUrl} fallbackSrc='https://via.placeholder.com/150' alt='paper image' objectFit='cover' boxSize='200px' />
         </Center>
         <Stack>
           <Heading color={useColorModeValue('gray.700', 'white')} fontSize='2xl' fontFamily='body'>

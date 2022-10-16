@@ -25,6 +25,8 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
     setClientPokemons(data?.pokemons)
   }, [data])
 
+  if (error) console.error(error)
+    
   if (!clientPokemons) {
     return (
       <Container maxW='6xl' color='white'>
