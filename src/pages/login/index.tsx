@@ -62,7 +62,7 @@ const Login: FC = () => {
             </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Don't have an account ?{' '}
+                Dont have an account ?{' '}
                 <Link href={signUpUrl} color={'blue.400'}>
                   Sign Up
                 </Link>
