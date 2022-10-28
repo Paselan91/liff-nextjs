@@ -4,7 +4,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import Link from 'next/link'
 import { memo, useEffect, useState } from 'react'
-import PaperCard from '../../components/organisms/PaperCard'
+import PaperCard from '@/components/organisms/PaperCard'
 
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_ALL_POKEMONS } from '@/graphql/test/pokemons.query'
@@ -25,7 +25,7 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
     setClientPokemons(data?.pokemons)
   }, [data])
 
-  if (error) console.error(error)
+  if (error) console.error("err reason",error)
     
   if (!clientPokemons) {
     return (

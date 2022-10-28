@@ -11,9 +11,8 @@ import {
 } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 
-import Image from 'next/image'
 import { memo } from 'react'
-import PaperCard from '../../components/organisms/PaperCard'
+import PaperCard from '@/components/organisms/PaperCard'
 
 const paper = {
   id: 1,
@@ -26,7 +25,11 @@ const Paper: NextPage = () => {
   return (
     <>
       <Container maxW='6xl' color='white'>
-        <PaperCard title={paper.title} description={paper.description} />
+        <PaperCard
+          title={paper.title}
+          description={paper.description}
+          imageUrl={""}
+        />
       </Container>
     </>
   )
