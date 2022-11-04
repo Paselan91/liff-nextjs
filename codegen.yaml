@@ -1,0 +1,12 @@
+schema: src/graphql/schemas/**/*.graphql
+documents: src/graphql/queries/**/*.ts
+generates:
+  src/types/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      scalars:
+        Date: string
+        DateTime: string

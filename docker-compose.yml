@@ -1,6 +1,7 @@
 version: '3'
 services:
   app:
+    container_name: a1-frontend
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,3 +10,7 @@ services:
     command: bash -c "yarn install && yarn dev"
     ports:
       - "3000:3000"
+networks:
+  default:
+    name: myapp-network
+    external: true
