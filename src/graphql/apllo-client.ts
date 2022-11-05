@@ -5,4 +5,6 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
+console.log("BE URL", `${process.env.NEXT_PUBLIC_TEST_BACKEND_URL}`)
+
 export default apolloClient

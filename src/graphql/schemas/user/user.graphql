@@ -1,0 +1,13 @@
+type User {
+  id: ID!
+  user_sub_id: String!
+  mail_address: String!
+  posts: [Post!]
+  created_at: String!
+  updated_at: String!
+}
+
+type Query {
+  fetchAllUsers: [User!]
+  fetchUserById(id: ID!): User!
+}
