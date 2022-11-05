@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client'
-import { SimpleGrid, Container } from '@chakra-ui/react'
+import { SimpleGrid, Container, Button, Link } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { memo, useEffect, useState } from 'react'
 import PaperCard from '@/components/organisms/PaperCard'
 
@@ -17,15 +17,28 @@ interface Props {
   pokemons: Pokemon[]
 }
 
-const Papers: NextPage<Props> = ({ pokemons }) => {
-  const { loading, error, data } = useQuery(FETCH_ALL_POKEMONS)
+// const Papers: NextPage<Props> = ({ pokemons }) => {
+const Papers: NextPage<Props> = () => {
+  // const { loading, error, data } = useQuery(FETCH_ALL_POKEMONS)
+  const pokemons: any = [
+    {
+      id: "1",
+      name: "test1",
+      image: "",
+    },
+    {
+      id: "2",
+      name: "test2",
+      image: "",
+    }
+  ]
   const [clientPokemons, setClientPokemons] = useState<Pokemon[]>(pokemons)
 
-  useEffect(() => {
-    setClientPokemons(data?.pokemons)
-  }, [data])
+  // useEffect(() => {
+  //   setClientPokemons(data?.pokemons)
+  // }, [data])
 
-  if (error) console.error("err reason",error)
+  // if (error) console.error("err reason",error)
     
   if (!clientPokemons) {
     return (
@@ -42,7 +55,7 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
         <SimpleGrid columns={3} spacing={10}>
           {clientPokemons.map((pokemon: any, index: number) => (
             <div key={index}>
-              <Link href={'/papers/1'}>
+              <NextLink href={'/papers/1'}>
                 <div style={{ cursor: 'pointer' }}>
                   <PaperCard
                     title={pokemon.name}
@@ -50,10 +63,13 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
                     imageUrl={pokemon.image}
                   />
                 </div>
-              </Link>
+              </NextLink>
             </div>
           ))}
         </SimpleGrid>
+        <NextLink href='/papers/user' passHref>
+          <Link color={"black"}>User Test Page</Link>
+        </NextLink>
       </Container>
     </>
   )
@@ -61,11 +77,11 @@ const Papers: NextPage<Props> = ({ pokemons }) => {
 
 export default memo(Papers)
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await apolloClient.query({
-    query: FETCH_ALL_POKEMONS,
-    variables: {},
-  })
-  const pokemons: Pokemon[] = data?.pokemons
-  return { props: { pokemons } }
-}
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { data } = await apolloClient.query({
+//     query: FETCH_ALL_POKEMONS,
+//     variables: {},
+//   })
+//   const pokemons: Pokemon[] = data?.pokemons
+//   return { props: { pokemons } }
+// }
