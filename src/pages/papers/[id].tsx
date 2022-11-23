@@ -25,11 +25,7 @@ const Paper: NextPage = () => {
   return (
     <>
       <Container maxW='6xl' color='white'>
-        <PaperCard
-          title={paper.title}
-          description={paper.description}
-          imageUrl={""}
-        />
+        <PaperCard title={paper.title} description={paper.description} imageUrl={''} />
       </Container>
     </>
   )

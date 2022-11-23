@@ -27,12 +27,12 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: 'Inspiration',
+    label: 'Posts',
     children: [
       {
         label: 'Explore Design Work',
         subLabel: 'Trending Design to inspire you',
-        href: '#',
+        href: '/posts',
       },
       {
         label: 'New & Noteworthy',
@@ -67,10 +67,10 @@ const navItems: NavItem[] = [
 ]
 
 const MenuBar: FC = () => {
-  const loginUrl = '/login'
-  const signUpUrl = '/signup'
-  const topUrl = '/papers'
-  const { isOpen, onToggle } = useDisclosure()
+  const loginUrl = '/login',
+    signUpUrl = '/signup',
+    topUrl = '/',
+    { isOpen, onToggle } = useDisclosure()
 
   return (
     <Box>
@@ -107,7 +107,7 @@ const MenuBar: FC = () => {
             color={useColorModeValue('gray.800', 'white')}
             style={{ textDecoration: 'none' }}
           >
-            Logo
+            Home
           </Button>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />

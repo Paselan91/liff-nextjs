@@ -31,17 +31,11 @@ docker compose up --build
         }
       `
       ```
-1. src/graphql/schemas 配下
-    - バックエンドの src/graph/schema/{model名のディレクトリ}/{model名}.graphql からファイルをコピーして貼り付け
-    - queryとmutaitonから extends の接頭辞を削除する（バックエンドでのみ必要な接頭辞であるため）
-      ```
-      extend type Query {
-        fetchAllUsers: [User!]
-      }
-                ↓↓
-      type Query {
-        fetchAllUsers: [User!]
-      }
-      ```
+1. src/graphql/schema 配下
+    - 既存の schema をディレクトリごと削除
+    - バックエンドの src/graph/schema をディレクトリごとコピーして貼り付け
 1. make gql-gen を実行
 src/types/generated/graphql.ts に必要なtypeが生成される（※編集はしない）
+
+## E2Eテスト
+2022 11/22現在、動作してません。導入のみです

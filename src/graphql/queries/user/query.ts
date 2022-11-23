@@ -5,7 +5,7 @@ export const FETCH_ALL_USERS = gql`
     fetchAllUsers {
       id
       mail_address
-      posts{
+      posts {
         id
       }
       created_at
@@ -18,7 +18,7 @@ export const FETCH_USER_BY_ID = gql`
     fetchUserById(id: $id) {
       id
       mail_address
-      posts{
+      posts {
         id
       }
       created_at
