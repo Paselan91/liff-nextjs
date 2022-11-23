@@ -13,16 +13,19 @@ interface Props {
 }
 
 const Papers: NextPage<Props> = ({ users }) => {
+  console.log('props users', users)
+
   // const { loading, error, data } = useQuery(FETCH_ALL_USERS)
   const [clientUsers, setClientUsers] = useState<any>(users)
   console.log('frist clientUsers', clientUsers)
 
-  useQuery(FETCH_ALL_USERS), {
-    onCompleted: (data: any) => {
-      console.log("useQuery ! data", data)
-      setClientUsers(data?.fetchAllUsers)
+  useQuery(FETCH_ALL_USERS),
+    {
+      onCompleted: (data: any) => {
+        console.log('useQuery ! data', data)
+        setClientUsers(data?.fetchAllUsers)
+      },
     }
-  }
 
   if (!clientUsers) {
     return (
@@ -44,7 +47,7 @@ const Papers: NextPage<Props> = ({ users }) => {
                   <PaperCard
                     title={user.user_sub_id}
                     description={user.mail_address}
-                    imageUrl={""}
+                    imageUrl={''}
                   />
                 </div>
               </Link>

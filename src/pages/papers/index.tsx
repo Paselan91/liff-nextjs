@@ -22,15 +22,15 @@ const Papers: NextPage<Props> = () => {
   // const { loading, error, data } = useQuery(FETCH_ALL_POKEMONS)
   const pokemons: any = [
     {
-      id: "1",
-      name: "test1",
-      image: "",
+      id: '1',
+      name: 'test1',
+      image: '',
     },
     {
-      id: "2",
-      name: "test2",
-      image: "",
-    }
+      id: '2',
+      name: 'test2',
+      image: '',
+    },
   ]
   const [clientPokemons, setClientPokemons] = useState<Pokemon[]>(pokemons)
 
@@ -39,7 +39,7 @@ const Papers: NextPage<Props> = () => {
   // }, [data])
 
   // if (error) console.error("err reason",error)
-    
+
   if (!clientPokemons) {
     return (
       <Container maxW='6xl' color='white'>
@@ -68,7 +68,7 @@ const Papers: NextPage<Props> = () => {
           ))}
         </SimpleGrid>
         <NextLink href='/papers/user' passHref>
-          <Link color={"black"}>User Test Page</Link>
+          <Link color={'black'}>User Test Page</Link>
         </NextLink>
       </Container>
     </>

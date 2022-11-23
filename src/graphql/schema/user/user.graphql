@@ -7,7 +7,7 @@ type User {
   updated_at: String!
 }
 
-type Query {
+extend type Query {
   fetchAllUsers: [User!]
   fetchUserById(id: ID!): User!
 }
