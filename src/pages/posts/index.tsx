@@ -29,50 +29,6 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
     },
   })
 
-  console.log(`posts/${1}`)
-
-  // const loadMore = useCallback(async () => {
-  //   const lastPostId = posts[posts.length-1].node.id;
-  //   await fetchMore({
-  //     variables: {
-  //       input: {
-  //         first: 20,
-  //         after: lastPostId,
-  //       },
-  //     },
-  //   });
-  // }, [data, fetchMore]);
-
-  // const fetchMorePosts = async () => {
-  //   const lastPostId = posts[posts.length-1].node.id;
-  //   await fetchMore({
-  //     variables: {
-  //       input: {
-  //         first: 20,
-  //         after: lastPostId,
-  //       },
-  //     },
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   console.log("useeffect")
-  //   console.log(data)
-  //   setPosts(data?.fetchAllPosts?.edges)
-  // }, [data])
-
-  // // TODO: エラーハンドリング考える
-  // if (error) console.error('err reason', error)
-
-  // if (loading) {
-  //   return (
-  //     // TODO: ロード用の画面を作成する
-  //     <Container maxW='6xl' color='white'>
-  //       <div>Loading ...</div>
-  //     </Container>
-  //   )
-  // }
-
   return (
     <>
       <Container maxW='6xl'>

@@ -39,3 +39,36 @@ src/types/generated/graphql.ts に必要なtypeが生成される（※編集は
 
 ## E2Eテスト
 2022 11/22現在、動作してません。導入のみです
+
+## トラブルシューティング
+- ブラウザに422エラーが出た場合
+-> GraphQL定義と実際のリクエストに乖離が生じている可能性があります。
+`src/graphql/schema`と`src/graphql/queries/**/query.ts or mutation.ts`を確認して下さい。
+```
+Server Error
+Error: Response not successful: Received status code 422
+
+This error happened while generating the page. Any console logs will be displayed in the terminal window.
+```
+例) 以下の場合422エラーになります
+```graphql
+# 定義(src/graphql/schema/post/post.graphql)
+fetchPostById(post_id: Int!): Post!
+
+# リクエスト(src/graphql/queries/post/query.ts)
+export const FETCH_POST_BY_ID = gql`
+  query fetchPostById($id: Int!) {
+    fetchPostById(id: $id) {        # <- post_idとすべきとろこ、idになってしまっている
+      id
+      title
+      body
+      image_url
+      is_public
+      user {
+        id
+        user_sub_id
+      }
+    }
+  }
+`
+```

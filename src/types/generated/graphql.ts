@@ -116,7 +116,7 @@ export type QueryFetchAllPostsArgs = {
 }
 
 export type QueryFetchPostByIdArgs = {
-  post_id: Scalars['Int']
+  id: Scalars['Int']
 }
 
 export type QueryFetchUserByIdArgs = {
@@ -143,6 +143,54 @@ export type User = {
   posts?: Maybe<Array<Post>>
   updated_at: Scalars['String']
   user_sub_id: Scalars['String']
+}
+
+export type FetchAllPostsQueryVariables = Exact<{
+  input: PaginationInput
+}>
+
+export type FetchAllPostsQuery = {
+  __typename?: 'Query'
+  fetchAllPosts: {
+    __typename?: 'PostConnection'
+    edges: Array<{
+      __typename?: 'PostEdge'
+      cursor: string
+      node: {
+        __typename?: 'Post'
+        id: string
+        title: string
+        body: string
+        image_url: string
+        is_public: boolean
+        user: { __typename?: 'User'; id: string; user_sub_id: string }
+      }
+    }>
+    pageInfo: {
+      __typename?: 'PageInfo'
+      hasNextPage: boolean
+      hasPreviousPage: boolean
+      startCursor?: string | null
+      endCursor?: string | null
+    }
+  }
+}
+
+export type FetchPostByIdQueryVariables = Exact<{
+  id: Scalars['Int']
+}>
+
+export type FetchPostByIdQuery = {
+  __typename?: 'Query'
+  fetchPostById: {
+    __typename?: 'Post'
+    id: string
+    title: string
+    body: string
+    image_url: string
+    is_public: boolean
+    user: { __typename?: 'User'; id: string; user_sub_id: string }
+  }
 }
 
 export type FetchAllUsersQueryVariables = Exact<{ [key: string]: never }>
@@ -173,6 +221,47 @@ export type FetchUserByIdQuery = {
   }
 }
 
+export const FetchAllPostsDocument = gql`
+  query fetchAllPosts($input: PaginationInput!) {
+    fetchAllPosts(input: $input) {
+      edges {
+        cursor
+        node {
+          id
+          title
+          body
+          image_url
+          is_public
+          user {
+            id
+            user_sub_id
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`
+export const FetchPostByIdDocument = gql`
+  query fetchPostById($id: Int!) {
+    fetchPostById(id: $id) {
+      id
+      title
+      body
+      image_url
+      is_public
+      user {
+        id
+        user_sub_id
+      }
+    }
+  }
+`
 export const FetchAllUsersDocument = gql`
   query fetchAllUsers {
     fetchAllUsers {
@@ -208,6 +297,34 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    fetchAllPosts(
+      variables: FetchAllPostsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<FetchAllPostsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchAllPostsQuery>(FetchAllPostsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'fetchAllPosts',
+        'query',
+      )
+    },
+    fetchPostById(
+      variables: FetchPostByIdQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<FetchPostByIdQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchPostByIdQuery>(FetchPostByIdDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'fetchPostById',
+        'query',
+      )
+    },
     fetchAllUsers(
       variables?: FetchAllUsersQueryVariables,
       requestHeaders?: Dom.RequestInit['headers'],
