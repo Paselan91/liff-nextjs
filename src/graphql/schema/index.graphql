@@ -38,8 +38,8 @@ interface Edge {
 }
 
 input PaginationInput {
-  first: Int
-  after: String
+  first: Int = 20
+  after: String = "0"
   last: Int
   before: String
 }

@@ -4,11 +4,11 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
 import { memo, useCallback, useState } from 'react'
-import { PaginationInput, PostEdge } from '../../types/generated/graphql'
 import PaperCard from '@/components/organisms/PaperCard'
 
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_ALL_POSTS } from '@/graphql/queries/post/query'
+import { PostEdge } from '@/types/generated/graphql'
 
 interface Props {
   propsPosts: PostEdge[]
@@ -28,48 +28,6 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
       setPosts(fetchAllPosts?.edges)
     },
   })
-
-  // const loadMore = useCallback(async () => {
-  //   const lastPostId = posts[posts.length-1].node.id;
-  //   await fetchMore({
-  //     variables: {
-  //       input: {
-  //         first: 20,
-  //         after: lastPostId,
-  //       },
-  //     },
-  //   });
-  // }, [data, fetchMore]);
-
-  // const fetchMorePosts = async () => {
-  //   const lastPostId = posts[posts.length-1].node.id;
-  //   await fetchMore({
-  //     variables: {
-  //       input: {
-  //         first: 20,
-  //         after: lastPostId,
-  //       },
-  //     },
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   console.log("useeffect")
-  //   console.log(data)
-  //   setPosts(data?.fetchAllPosts?.edges)
-  // }, [data])
-
-  // TODO: エラーハンドリング考える
-  if (error) console.error('err reason', error)
-
-  if (loading) {
-    return (
-      // TODO: ロード用の画面を作成する
-      <Container maxW='6xl' color='white'>
-        <div>Loading ...</div>
-      </Container>
-    )
-  }
 
   return (
     <>
@@ -96,9 +54,9 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
           </Button>
         </Stack>
         <SimpleGrid columns={3} spacing={10}>
-          {posts.map((post: any, index: number) => (
+          {posts.map((post: PostEdge, index: number) => (
             <div key={index}>
-              <NextLink href={'/papers/1'}>
+              <NextLink href={`posts/${post.node.id}`}>
                 <div style={{ cursor: 'pointer' }}>
                   <PaperCard
                     title={post.node.title}
@@ -137,15 +95,13 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
 export default memo(PostList)
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const input: PaginationInput = {
-    first: 20,
-    after: '0',
-  }
-
   const { data } = await apolloClient.query({
     query: FETCH_ALL_POSTS,
     variables: {
-      input: input,
+      input: {
+        first: 20,
+        after: '0',
+      },
     },
   })
 

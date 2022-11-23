@@ -28,8 +28,8 @@ export const FETCH_ALL_POSTS = gql`
 `
 
 export const FETCH_POST_BY_ID = gql`
-  query fetchPostById($id: ID!) {
-    fetchPostById(post_id: 1) {
+  query fetchPostById($id: Int!) {
+    fetchPostById(post_id: $id) {
       id
       title
       body
