@@ -1,4 +1,4 @@
-schema: src/graphql/schema/**/*.graphql
+schema: http://myapp-backend/query
 documents: src/graphql/queries/**/*.ts
 generates:
   src/types/generated/graphql.ts:
