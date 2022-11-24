@@ -116,7 +116,7 @@ export type QueryFetchAllPostsArgs = {
 }
 
 export type QueryFetchPostByIdArgs = {
-  id: Scalars['Int']
+  post_id: Scalars['Int']
 }
 
 export type QueryFetchUserByIdArgs = {
@@ -249,7 +249,7 @@ export const FetchAllPostsDocument = gql`
 `
 export const FetchPostByIdDocument = gql`
   query fetchPostById($id: Int!) {
-    fetchPostById(id: $id) {
+    fetchPostById(post_id: $id) {
       id
       title
       body
