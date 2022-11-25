@@ -9,6 +9,7 @@
     "lint": "next lint --dir src",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
+    "typecheck": "tsc -p . --noEmit",
     "test:e2e": "playwright test --config=src/e2e/playwright.config.ts"
   },
   "dependencies": {
