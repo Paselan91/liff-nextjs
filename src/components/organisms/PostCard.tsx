@@ -8,10 +8,18 @@ import {
   useColorModeValue,
   Image,
   Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { FC, memo } from 'react'
 import { DELETE_POST } from '../../graphql/queries/post/mutation'
-// import { useRouter } from 'next/router';
 
 interface Props {
   postId: string
@@ -22,6 +30,8 @@ interface Props {
 }
 
 const PostCard: FC<Props> = ({ postId, title, description, imageUrl, showBtns }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [deletePost, { data }] = useMutation(DELETE_POST)
   const router = useRouter()
 
@@ -61,7 +71,7 @@ const PostCard: FC<Props> = ({ postId, title, description, imageUrl, showBtns })
         {showBtns && (
           <Stack mt={8} direction={'row'} spacing={4}>
             <Button
-              onClick={() => onClickDeletePost(postId)}
+              onClick={onOpen}
               flex={1}
               fontSize={'sm'}
               rounded={'full'}
@@ -95,6 +105,24 @@ const PostCard: FC<Props> = ({ postId, title, description, imageUrl, showBtns })
             </Button>
           </Stack>
         )}
+        <Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Confirmation</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>Are you sure to delete ?</ModalBody>
+              <ModalFooter>
+                <Button colorScheme='blue' mr={3} onClick={() => onClickDeletePost(postId)}>
+                  Yes,delete
+                </Button>
+                <Button variant='ghost' onClick={onClose}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Box>
     </Center>
   )

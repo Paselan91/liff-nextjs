@@ -3,7 +3,8 @@ import { SimpleGrid, Container, Button, Stack } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
-import { memo, useCallback, useState } from 'react'
+import { useRouter } from 'next/router'
+import { memo, useState, useEffect } from 'react'
 import PostCard from '@/components/organisms/PostCard'
 
 import apolloClient from '@/graphql/apllo-client'
@@ -17,7 +18,7 @@ interface Props {
 const PostList: NextPage<Props> = ({ propsPosts }) => {
   const [posts, setPosts] = useState<PostEdge[]>(propsPosts)
 
-  const { fetchMore, data, loading, error } = useQuery(FETCH_ALL_POSTS, {
+  const { fetchMore, refetch, data, loading, error } = useQuery(FETCH_ALL_POSTS, {
     variables: {
       input: {
         first: 20,
@@ -28,6 +29,10 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
       setPosts(fetchAllPosts?.edges)
     },
   })
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   return (
     <>
@@ -110,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const posts: PostEdge[] = data?.fetchAllPosts?.edges
   return {
     props: {
-      // TODO: propsPosts 名前変える
       propsPosts: posts,
     },
   }
