@@ -4,7 +4,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
 import { memo, useCallback, useState } from 'react'
-import PaperCard from '@/components/organisms/PaperCard'
+import PostCard from '@/components/organisms/PostCard'
 
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_ALL_POSTS } from '@/graphql/queries/post/query'
@@ -58,10 +58,12 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
             <div key={index}>
               <NextLink href={`posts/${post.node.id}`}>
                 <div style={{ cursor: 'pointer' }}>
-                  <PaperCard
+                  <PostCard
+                    postId={post.node.id}
                     title={post.node.title}
                     description={post.node.body}
                     imageUrl={post.node.image_url}
+                    showBtns={false}
                   />
                 </div>
               </NextLink>
