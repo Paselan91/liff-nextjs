@@ -3,7 +3,6 @@ import { SimpleGrid, Container, Button, Stack } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
 import { memo, useState, useEffect } from 'react'
 import PostCard from '@/components/organisms/PostCard'
 
