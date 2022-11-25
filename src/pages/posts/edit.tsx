@@ -1,29 +1,15 @@
 import {
-  SimpleGrid,
   Container,
-  Button,
-  Link,
-  Box,
-  Center,
   Stack,
   FormControl,
   FormLabel,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
   InputGroup,
-  InputLeftElement,
   Radio,
   RadioGroup,
 } from '@chakra-ui/react'
 import type { NextPage } from 'next'
-import { memo, useEffect, useState } from 'react'
+import { memo, useState } from 'react'
 
 const EditPost: NextPage = () => {
   const [isPublic, setIsPublic] = useState('1')
