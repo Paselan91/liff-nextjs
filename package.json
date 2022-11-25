@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --dir src",
-    "lint:fix": "yarn lint --fix",
-    "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
+    "lint": "eslint src && prettier --check src && tsc --noEmit --project tsconfig.json",
+    "lint:fix": "eslint --fix src && prettier --write src",
     "test:e2e": "playwright test --config=src/e2e/playwright.config.ts"
   },
   "dependencies": {
@@ -40,7 +40,15 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.4",
     "prettier": "^2.7.1",
     "typescript": "4.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged --allow-empty"
+    }
   }
 }

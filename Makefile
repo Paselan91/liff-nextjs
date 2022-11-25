@@ -4,9 +4,8 @@ app:
 lint:
 	docker compose run --rm app yarn lint
 
-fmt:
-	docker compose run --rm app yarn lint:fix &
-	docker compose run --rm app yarn format
+fix:
+	docker compose run --rm app yarn lint:fix
 
 gqlgen:
 	docker compose run --rm app yarn run graphql-codegen --config codegen.yaml

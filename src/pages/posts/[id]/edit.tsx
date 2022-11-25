@@ -8,9 +8,9 @@ import {
   Radio,
   RadioGroup,
 } from '@chakra-ui/react'
-
-import type { GetServerSideProps, NextPage } from 'next'
+import type { NextPage, GetServerSideProps } from 'next'
 import { memo, useState } from 'react'
+
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_POST_BY_ID } from '@/graphql/queries/post/query'
 import { Post } from '@/types/generated/graphql'
@@ -22,9 +22,7 @@ interface Props {
 const PostEdit: NextPage<Props> = ({ post }) => {
   const [isPublic, setIsPublic] = useState('1')
 
-  post.is_public 
-    ? setIsPublic('1') 
-    : setIsPublic('0')
+  post.is_public ? setIsPublic('1') : setIsPublic('0')
 
   return (
     <>
