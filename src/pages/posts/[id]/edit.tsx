@@ -22,6 +22,10 @@ interface Props {
 const PostEdit: NextPage<Props> = ({ post }) => {
   const [isPublic, setIsPublic] = useState('1')
 
+  post.is_public 
+    ? setIsPublic('1') 
+    : setIsPublic('0')
+
   return (
     <>
       <Container maxW='4xl'>
@@ -40,7 +44,7 @@ const PostEdit: NextPage<Props> = ({ post }) => {
           </FormControl>
           <FormControl isRequired>
             <FormLabel>Is Public</FormLabel>
-            <RadioGroup onChange={setIsPublic} value={post.is_public}>
+            <RadioGroup onChange={setIsPublic} value={isPublic}>
               <Stack direction='row'>
                 <Radio value='1'>Public</Radio>
                 <Radio value='0'>Not Public</Radio>
