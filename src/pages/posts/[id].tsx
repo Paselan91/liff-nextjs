@@ -1,7 +1,7 @@
 import { Button, Center, Container } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 import { memo } from 'react'
-import PaperCard from '@/components/organisms/PaperCard'
+import PostCard from '@/components/organisms/PostCard'
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_POST_BY_ID } from '@/graphql/queries/post/query'
 import { Post } from '@/types/generated/graphql'
@@ -14,7 +14,13 @@ const PostDetail: NextPage<Props> = ({ post }) => {
   return (
     <>
       <Container maxW='6xl' color='white'>
-        <PaperCard title={post.title} description={post.body} imageUrl={post.image_url} />
+        <PostCard
+          postId={post.id}
+          title={post.title}
+          description={post.body}
+          imageUrl={post.image_url}
+          showBtns={true}
+        />
         <Center>
           <Button
             as='a'
