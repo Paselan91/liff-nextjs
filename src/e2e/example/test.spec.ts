@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react'
 import { test, expect } from '@playwright/test'
 
 // test.describe("Top画面", () => {

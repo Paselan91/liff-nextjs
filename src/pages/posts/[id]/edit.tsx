@@ -1,32 +1,27 @@
 import {
-  SimpleGrid,
   Container,
-  Button,
-  Link,
-  Box,
-  Center,
   Stack,
   FormControl,
   FormLabel,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
   InputGroup,
-  InputLeftElement,
   Radio,
   RadioGroup,
 } from '@chakra-ui/react'
-import type { NextPage } from 'next'
-import { memo, useEffect, useState } from 'react'
 
-const EditPost: NextPage = () => {
+import type { GetServerSideProps, NextPage } from 'next'
+import { memo, useState } from 'react'
+import apolloClient from '@/graphql/apllo-client'
+import { FETCH_POST_BY_ID } from '@/graphql/queries/post/query'
+import { Post } from '@/types/generated/graphql'
+
+interface Props {
+  post: Post
+}
+
+const PostEdit: NextPage<Props> = ({ post }) => {
   const [isPublic, setIsPublic] = useState('1')
+
   return (
     <>
       <Container maxW='4xl'>
@@ -34,18 +29,18 @@ const EditPost: NextPage = () => {
           <FormControl isRequired>
             <FormLabel>Title</FormLabel>
             <InputGroup>
-              <Input type='title' name='title' placeholder='Enter title' />
+              <Input type='title' name='title' placeholder={post.title} />
             </InputGroup>
           </FormControl>
           <FormControl isRequired>
             <FormLabel>Body</FormLabel>
             <InputGroup>
-              <Input type='body' name='body' placeholder='Enter body' />
+              <Input type='body' name='body' placeholder={post.body} />
             </InputGroup>
           </FormControl>
           <FormControl isRequired>
             <FormLabel>Is Public</FormLabel>
-            <RadioGroup onChange={setIsPublic} value={isPublic}>
+            <RadioGroup onChange={setIsPublic} value={post.is_public}>
               <Stack direction='row'>
                 <Radio value='1'>Public</Radio>
                 <Radio value='0'>Not Public</Radio>
@@ -58,4 +53,22 @@ const EditPost: NextPage = () => {
   )
 }
 
-export default memo(EditPost)
+export default memo(PostEdit)
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.query
+
+  const { data } = await apolloClient.query({
+    query: FETCH_POST_BY_ID,
+    variables: {
+      id: id,
+    },
+  })
+
+  const post: Post = data?.fetchPostById
+  return {
+    props: {
+      post: post,
+    },
+  }
+}
