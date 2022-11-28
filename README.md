@@ -24,8 +24,10 @@ src/types/generated/graphql.ts に必要なtypeが生成される（※編集は
 
 ## トラブルシューティング
 - ブラウザに422エラーが出た場合
--> GraphQL定義と実際のリクエストに乖離が生じている可能性があります。
-`src/graphql/schema`と`src/graphql/queries/**/query.ts or mutation.ts`を確認して下さい。
+-> GraphQL定義と実際のリクエストの定義が一致していない可能性があります。  
+バックエンド`src/graph/schema/{対象のモデル}`と  
+フロントエンド`src/graphql/queries/**/query.ts or mutation.ts`  
+の定義に差異がないか確認して下さい。
 ```
 Server Error
 Error: Response not successful: Received status code 422
