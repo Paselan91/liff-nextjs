@@ -9,7 +9,28 @@ if (typeof window !== 'undefined') {
 
 const apolloClient = new ApolloClient({
   uri: beUrl,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          fetchAllPosts: {
+            // 対象のクエリ名
+            keyArgs: ['first', 'after'], // キャッシュの区別に使用するリクエストパラメータ
+            merge: (existing: any, incoming: any) => {
+              // キャッシュのマージ方法を定義
+              if (!existing?.edges) return incoming?.edges
+              console.log('existing.edges', existing.edges)
+              console.log('incoming.edges', incoming.edges)
+              return {
+                data: [...existing.edges, ...incoming.edges],
+                pageInfo: incoming.pageInfo,
+              }
+            },
+          },
+        },
+      },
+    },
+  }),
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network',
