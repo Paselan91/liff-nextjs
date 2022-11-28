@@ -10,6 +10,11 @@ if (typeof window !== 'undefined') {
 const apolloClient = new ApolloClient({
   uri: beUrl,
   cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network',
+    },
+  },
 })
 
 export default apolloClient
