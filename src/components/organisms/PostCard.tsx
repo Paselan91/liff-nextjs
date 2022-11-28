@@ -90,6 +90,8 @@ const PostCard: FC<Props> = ({ postId, title, description, imageUrl, showBtns })
               Delete
             </Button>
             <Button
+              as={'a'}
+              href={`/posts/${postId}/edit`}
               flex={1}
               fontSize={'sm'}
               rounded={'full'}
