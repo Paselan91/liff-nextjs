@@ -1,4 +1,5 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { PostConnection } from '@/types/generated/graphql'
 
 // TODO: 要調査 Localでdocker-composeを使用している理由から、SSGとCSRでエンドポイントを分ける必要がありそう
 // docker-composeの設定を変えれば不要？ backendを host networkにする?
@@ -14,16 +15,11 @@ const apolloClient = new ApolloClient({
       Query: {
         fields: {
           fetchAllPosts: {
-            // 対象のクエリ名
-            keyArgs: ['first', 'after'], // キャッシュの区別に使用するリクエストパラメータ
-            merge: (existing: any, incoming: any) => {
-              // キャッシュのマージ方法を定義
-              if (!existing?.edges) return incoming?.edges
-              console.log('existing.edges', existing.edges)
-              console.log('incoming.edges', incoming.edges)
+            keyArgs: ['first', 'after'],
+            merge: (existing: PostConnection, incoming: PostConnection) => {
               return {
-                data: [...existing.edges, ...incoming.edges],
-                pageInfo: incoming.pageInfo,
+                ...(incoming ?? {}),
+                edges: [...(existing?.edges ?? []), ...(incoming?.edges ?? [])],
               }
             },
           },

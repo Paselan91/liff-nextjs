@@ -3,7 +3,7 @@ import { SimpleGrid, Container, Button, Stack } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import PostCard from '@/components/organisms/PostCard'
 
 import apolloClient from '@/graphql/apllo-client'
@@ -20,7 +20,6 @@ interface Props {
 
 const PostList: NextPage<Props> = ({ propsPosts }) => {
   const [posts, setPosts] = useState<PostEdge[]>(propsPosts)
-  const [endCursor, setEndCursor] = useState<string>('')
   const [hasNextPage, setHasNextPage] = useState(false)
 
   const { fetchMore, data } = useQuery<FetchAllPostsQuery, FetchAllPostsQueryVariables>(
@@ -33,37 +32,20 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
       },
       onCompleted: ({ fetchAllPosts }) => {
         setPosts(fetchAllPosts.edges as PostEdge[])
-        setEndCursor(fetchAllPosts.pageInfo.endCursor as string)
         setHasNextPage(fetchAllPosts.pageInfo.hasNextPage)
-        console.log('fetchALlPosts')
-        console.log(fetchAllPosts.pageInfo.endCursor)
-        console.log(fetchAllPosts.pageInfo.hasNextPage)
       },
     },
   )
 
-  // TODO: 暫定実装　then以下がなくても onCompleted内で動作するはず　要調査
-  const fetchMorePosts = async () => {
+  const fetchMorePosts = useCallback(async () => {
     await fetchMore({
       variables: {
         input: {
-          after: endCursor,
+          after: data?.fetchAllPosts.pageInfo.endCursor,
         },
       },
-    }).then((res) => {
-      // console.log("data")
-      // console.log(res.data.fetchAllPosts.edges)
-      const morePosts = res.data.fetchAllPosts.edges
-      setPosts((prev) => [...prev, ...morePosts])
-      setEndCursor(res.data.fetchAllPosts.pageInfo.endCursor)
-      setHasNextPage(res.data.fetchAllPosts.pageInfo.hasNextPage)
     })
-  }
-
-  // useEffect(() => {
-  //   console.log('data fetchMorePosts')
-  //   console.log(data)
-  // }, [data])
+  }, [data, fetchMore])
 
   return (
     <>
@@ -142,7 +124,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     variables: {
       input: {
         first: 20,
-        after: '0',
       },
     },
   })
