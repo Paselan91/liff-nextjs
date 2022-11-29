@@ -3,12 +3,16 @@ import { SimpleGrid, Container, Button, Stack } from '@chakra-ui/react'
 import type { GetServerSideProps, NextPage } from 'next'
 
 import NextLink from 'next/link'
-import { memo, useState, useEffect } from 'react'
+import { memo, useCallback, useState } from 'react'
 import PostCard from '@/components/organisms/PostCard'
 
 import apolloClient from '@/graphql/apllo-client'
 import { FETCH_ALL_POSTS } from '@/graphql/queries/post/query'
-import { PostEdge } from '@/types/generated/graphql'
+import {
+  FetchAllPostsQuery,
+  FetchAllPostsQueryVariables,
+  PostEdge,
+} from '@/types/generated/graphql'
 
 interface Props {
   propsPosts: PostEdge[]
@@ -16,22 +20,32 @@ interface Props {
 
 const PostList: NextPage<Props> = ({ propsPosts }) => {
   const [posts, setPosts] = useState<PostEdge[]>(propsPosts)
+  const [hasNextPage, setHasNextPage] = useState(false)
 
-  const { fetchMore, refetch, data, loading, error } = useQuery(FETCH_ALL_POSTS, {
-    variables: {
-      input: {
-        first: 20,
-        after: '0',
+  const { fetchMore, data } = useQuery<FetchAllPostsQuery, FetchAllPostsQueryVariables>(
+    FETCH_ALL_POSTS,
+    {
+      variables: {
+        input: {
+          first: 20,
+        },
+      },
+      onCompleted: ({ fetchAllPosts }) => {
+        setPosts(fetchAllPosts.edges as PostEdge[])
+        setHasNextPage(fetchAllPosts.pageInfo.hasNextPage)
       },
     },
-    onCompleted: ({ fetchAllPosts }) => {
-      setPosts(fetchAllPosts?.edges)
-    },
-  })
+  )
 
-  useEffect(() => {
-    refetch()
-  }, [refetch])
+  const fetchMorePosts = useCallback(async () => {
+    await fetchMore({
+      variables: {
+        input: {
+          after: data?.fetchAllPosts.pageInfo.endCursor,
+        },
+      },
+    })
+  }, [data, fetchMore])
 
   return (
     <>
@@ -74,25 +88,29 @@ const PostList: NextPage<Props> = ({ propsPosts }) => {
             </div>
           ))}
         </SimpleGrid>
-        <Button
-          // onClick={() => fetchMorePosts()}
-          as='a'
-          my='5'
-          mx='auto'
-          size='lg'
-          fontSize={'sm'}
-          rounded={'full'}
-          color={'white'}
-          bg={'blue.300'}
-          _hover={{
-            bg: 'blue.500',
-          }}
-          _focus={{
-            bg: 'blue.500',
-          }}
-        >
-          Fetch more
-        </Button>
+        {hasNextPage && (
+          <Stack spacing={4} direction='row' align='center'>
+            <Button
+              onClick={() => fetchMorePosts()}
+              as='a'
+              my='5'
+              mx='auto'
+              size='lg'
+              fontSize={'sm'}
+              rounded={'full'}
+              color={'white'}
+              bg={'red.300'}
+              _hover={{
+                bg: 'red.500',
+              }}
+              _focus={{
+                bg: 'red.500',
+              }}
+            >
+              Fetch more
+            </Button>
+          </Stack>
+        )}
       </Container>
     </>
   )
@@ -106,7 +124,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     variables: {
       input: {
         first: 20,
-        after: '0',
       },
     },
   })
