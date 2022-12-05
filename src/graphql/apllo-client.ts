@@ -2,12 +2,12 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { PostConnection } from '@/types/generated/graphql'
 
 const getBackendUrl = () => {
-  if (process.env.NEXT_PUBLIC_IS_PRODUCTION) {
+  if (process.env.NODE_ENV === 'production') {
     console.log('env prod')
     return `${process.env.NEXT_PUBLIC_BACKEND_URL}`
   }
-  console.log('env local')
 
+  console.log('env local')
   // TODO: 要調査 Localでdocker-composeを使用している理由から、SSGとCSRでエンドポイントを分ける必要がありそう
   // docker-composeの設定を変えれば不要？ backendを host networkにする?
   if (typeof window !== 'undefined') {
@@ -16,8 +16,11 @@ const getBackendUrl = () => {
   return `${process.env.NEXT_PUBLIC_BACKEND_URL_FOR_SSR}`
 }
 
+const beUrl = getBackendUrl()
+console.log('BE URL:', beUrl)
+
 const apolloClient = new ApolloClient({
-  uri: getBackendUrl(),
+  uri: beUrl,
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
