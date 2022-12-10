@@ -145,6 +145,44 @@ export type User = {
   user_sub_id: Scalars['String']
 }
 
+export type CreatePostMutationVariables = Exact<{
+  input: CreatePostInput
+}>
+
+export type CreatePostMutation = {
+  __typename?: 'Mutation'
+  createPost: {
+    __typename?: 'Post'
+    id: string
+    title: string
+    body: string
+    image_url: string
+    is_public: boolean
+  }
+}
+
+export type UpdatePostMutationVariables = Exact<{
+  input: UpdatePostInput
+}>
+
+export type UpdatePostMutation = {
+  __typename?: 'Mutation'
+  updatePost: {
+    __typename?: 'Post'
+    id: string
+    title: string
+    body: string
+    image_url: string
+    is_public: boolean
+  }
+}
+
+export type DeletePostMutationVariables = Exact<{
+  post_id: Scalars['Int']
+}>
+
+export type DeletePostMutation = { __typename?: 'Mutation'; deletePost: boolean }
+
 export type FetchAllPostsQueryVariables = Exact<{
   input: PaginationInput
 }>
@@ -221,6 +259,42 @@ export type FetchUserByIdQuery = {
   }
 }
 
+export type FetchUserByIdForHealthcheckQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type FetchUserByIdForHealthcheckQuery = {
+  __typename?: 'Query'
+  fetchUserById: { __typename?: 'User'; id: string; user_sub_id: string }
+}
+
+export const CreatePostDocument = gql`
+  mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      id
+      title
+      body
+      image_url
+      is_public
+    }
+  }
+`
+export const UpdatePostDocument = gql`
+  mutation updatePost($input: UpdatePostInput!) {
+    updatePost(input: $input) {
+      id
+      title
+      body
+      image_url
+      is_public
+    }
+  }
+`
+export const DeletePostDocument = gql`
+  mutation deletePost($post_id: Int!) {
+    deletePost(post_id: $post_id)
+  }
+`
 export const FetchAllPostsDocument = gql`
   query fetchAllPosts($input: PaginationInput!) {
     fetchAllPosts(input: $input) {
@@ -286,6 +360,14 @@ export const FetchUserByIdDocument = gql`
     }
   }
 `
+export const FetchUserByIdForHealthcheckDocument = gql`
+  query fetchUserByIdForHealthcheck($id: ID!) {
+    fetchUserById(id: $id) {
+      id
+      user_sub_id
+    }
+  }
+`
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -297,6 +379,48 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    createPost(
+      variables: CreatePostMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<CreatePostMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreatePostMutation>(CreatePostDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'createPost',
+        'mutation',
+      )
+    },
+    updatePost(
+      variables: UpdatePostMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<UpdatePostMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdatePostMutation>(UpdatePostDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'updatePost',
+        'mutation',
+      )
+    },
+    deletePost(
+      variables: DeletePostMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<DeletePostMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DeletePostMutation>(DeletePostDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'deletePost',
+        'mutation',
+      )
+    },
     fetchAllPosts(
       variables: FetchAllPostsQueryVariables,
       requestHeaders?: Dom.RequestInit['headers'],
@@ -350,6 +474,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'fetchUserById',
+        'query',
+      )
+    },
+    fetchUserByIdForHealthcheck(
+      variables: FetchUserByIdForHealthcheckQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<FetchUserByIdForHealthcheckQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<FetchUserByIdForHealthcheckQuery>(
+            FetchUserByIdForHealthcheckDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'fetchUserByIdForHealthcheck',
         'query',
       )
     },
