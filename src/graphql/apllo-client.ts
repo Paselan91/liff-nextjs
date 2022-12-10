@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { PostConnection } from '@/types/generated/graphql'
 
 const getBackendUrl = () => {
@@ -20,7 +20,11 @@ const beUrl = getBackendUrl()
 console.log('BE URL:', beUrl)
 
 const apolloClient = new ApolloClient({
-  uri: beUrl,
+  ssrMode: true,
+  link: createHttpLink({
+    uri: beUrl,
+    headers: {},
+  }),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
