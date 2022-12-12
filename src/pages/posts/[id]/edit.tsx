@@ -17,7 +17,12 @@ import { memo, useState, useEffect, ChangeEvent } from 'react'
 import apolloClient from '@/graphql/apllo-client'
 import { UPDATE_POST } from '@/graphql/queries/post/mutation'
 import { FETCH_POST_BY_ID } from '@/graphql/queries/post/query'
-import { Post, UpdatePostInput } from '@/types/generated/graphql'
+import {
+  Post,
+  UpdatePostInput,
+  UpdatePostMutation,
+  UpdatePostMutationVariables,
+} from '@/types/generated/graphql'
 
 interface Props {
   post: Post
@@ -30,7 +35,10 @@ const PostEdit: NextPage<Props> = ({ post }) => {
 
   const toast = useToast()
 
-  const [updatePost, { data }] = useMutation(UPDATE_POST)
+  const [updatePost, { data, error }] = useMutation<
+    UpdatePostMutation,
+    UpdatePostMutationVariables
+  >(UPDATE_POST)
 
   useEffect(() => {
     if (data) {
@@ -41,7 +49,12 @@ const PostEdit: NextPage<Props> = ({ post }) => {
         isClosable: true,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
+
+  if (error) {
+    console.log('err', error)
+  }
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)
   const onChangeBoby = (e: ChangeEvent<HTMLInputElement>) => setBody(e.target.value)
@@ -60,8 +73,7 @@ const PostEdit: NextPage<Props> = ({ post }) => {
         },
       })
     } catch (err) {
-      // TODO: エラーハンドリング
-      return
+      console.log('updatePost err', err)
     }
   }
 

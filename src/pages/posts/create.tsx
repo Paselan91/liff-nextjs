@@ -16,7 +16,11 @@ import { useRouter } from 'next/router'
 import { memo, useState, useEffect, ChangeEvent } from 'react'
 
 import { CREATE_POST } from '@/graphql/queries/post/mutation'
-import { CreatePostInput } from '@/types/generated/graphql'
+import {
+  CreatePostInput,
+  CreatePostMutation,
+  CreatePostMutationVariables,
+} from '@/types/generated/graphql'
 
 const PostCreate: NextPage = () => {
   const router = useRouter()
@@ -27,7 +31,10 @@ const PostCreate: NextPage = () => {
 
   const toast = useToast()
 
-  const [createPost, { data }] = useMutation(CREATE_POST)
+  const [createPost, { data, error }] = useMutation<
+    CreatePostMutation,
+    CreatePostMutationVariables
+  >(CREATE_POST)
 
   useEffect(() => {
     if (data) {
@@ -39,7 +46,12 @@ const PostCreate: NextPage = () => {
       })
       router.push('/posts')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
+
+  if (error) {
+    console.log('error', error)
+  }
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)
   const onChangeBoby = (e: ChangeEvent<HTMLInputElement>) => setBody(e.target.value)
@@ -59,9 +71,7 @@ const PostCreate: NextPage = () => {
         },
       })
     } catch (err) {
-      console.log(err)
-      // TODO: エラーハンドリング
-      return
+      console.log('createPost err', err)
     }
   }
 

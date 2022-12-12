@@ -20,6 +20,7 @@ import {
 import { useRouter } from 'next/router'
 import { FC, memo } from 'react'
 import { DELETE_POST } from '../../graphql/queries/post/mutation'
+import { DeletePostMutation, DeletePostMutationVariables } from '@/types/generated/graphql'
 
 interface Props {
   postId: string
@@ -32,13 +33,19 @@ interface Props {
 const PostCard: FC<Props> = ({ postId, title, description, imageUrl, showBtns }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [deletePost, { data }] = useMutation(DELETE_POST)
+  const [deletePost, { error }] = useMutation<DeletePostMutation, DeletePostMutationVariables>(
+    DELETE_POST,
+  )
   const router = useRouter()
 
   const onClickDeletePost = (postId: string) => {
-    deletePost({ variables: { post_id: postId } })
+    deletePost({ variables: { post_id: Number(postId) } })
     // TODO: deletePostの返り値がtrueの場合のみ遷移させる
     router.push('/posts')
+  }
+
+  if (error) {
+    console.log('error', error)
   }
 
   return (
