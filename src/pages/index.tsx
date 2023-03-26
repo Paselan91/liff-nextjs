@@ -1,14 +1,7 @@
-import { Box, Button } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 
 const Home: NextPage = () => {
-  return (
-    <Box mt={5} ml={5}>
-      <Button as={'a'} fontSize={'xl'} fontWeight={400} variant={'link'} href={'/posts'}>
-        Posts List
-      </Button>
-    </Box>
-  )
+  return <p>this is top page</p>
 }
 
 export default Home

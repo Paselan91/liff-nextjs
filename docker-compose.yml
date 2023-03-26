@@ -7,10 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
-    command: bash -c "yarn install && yarn dev"
+    command: bash -c "yarn install && yarn dev-https"
     ports:
       - "3000:3000"
-networks:
-  default:
-    name: app-external
-    external: true
